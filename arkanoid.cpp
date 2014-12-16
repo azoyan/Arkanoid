@@ -11,22 +11,24 @@
 #include <QDebug>
 #include <QApplication>
 
-Arkanoid::Arkanoid(QWidget *parent) : QWidget(parent) {
-    createMap( qApp->applicationDirPath() + "\\map.txt" );
+Arkanoid::Arkanoid(QWidget *parent) : QWidget(parent) {    
     QTimer* timer = new QTimer(this);
+    createMap( qApp->applicationDirPath() + "\\map.txt" );
     timer->setInterval(1000/600);
     timer->setSingleShot(false);
     setMouseTracking(true);
     connect(timer, SIGNAL(timeout()), this, SLOT(repaint()));
-    timer->start();
+    timer->start();    
+}
+
+void Arkanoid::loadMap(QString file) {
+    createMap( qApp->applicationDirPath() + "\\map.txt" );
 }
 
 void Arkanoid::createMap(QString filePath) {
     lastMap = filePath;
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {        
-        return;
-    }
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
     QTextStream in(&file);
     while (!in.atEnd())  {
         QString line = in.readLine();
@@ -56,7 +58,6 @@ void Arkanoid::keyPressEvent(QKeyEvent* e) {
 
 void Arkanoid::mouseMoveEvent(QMouseEvent* e) {
     platform->moveToX(e->x());
-    platform->moveToY(e->y());
 }
 
 void Arkanoid::restart() {
@@ -180,7 +181,6 @@ void Arkanoid::collide(Element* e1, Element* e2) {
     }
 }
 
-
 void Arkanoid::bot() {
     int ball_mid = balls.front()->x() + balls.front()->width() / 2;
 
@@ -188,6 +188,7 @@ void Arkanoid::bot() {
 
 
     platform->moveToX(1.08 * (ball_mid - botPlatform_mid));
+
     botPlatform->moveToX(0.95 * (ball_mid - botPlatform_mid));
 
 }

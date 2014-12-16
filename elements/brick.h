@@ -8,23 +8,12 @@
 class Brick: public Element
 {
 
-public:
-    Brick(int x, int y);
-    Brick(int x, int y, int hp);
+public:    
     Brick(int x, int y, int width, int height);
     Brick(int x, int y, int width, int height, int hp);
-
     void update();
-
     Id getId();
-
     void show(QPainter& painter);
-    enum { Width = 40, Height = 20 };
-
-
-
-private:
-    static QImage& texture();
 };
 
 #endif // BRICK_H
